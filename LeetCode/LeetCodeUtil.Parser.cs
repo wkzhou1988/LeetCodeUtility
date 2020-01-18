@@ -85,4 +85,35 @@ public partial class LeetCodeUtil {
         }
         return array;
     }
+
+    public static List<string> ParseListOfStrings(string s) {
+        if (s.Length < 2) return new List<string>();
+        var ret = new List<string>();
+        s = s.Substring(1, s.Length - 2);
+        bool isInString = false;
+        string tmp = "";
+        for (int i = 0; i < s.Length; i++) {
+            if (s[i] == '"') {
+                if (isInString) {
+                    ret.Add(tmp);
+                    tmp = "";
+                    isInString = false;
+                } else {
+                    isInString = true;
+                }
+            } else if (s[i] == ',') {
+                if (isInString) {
+                    tmp += s[i];
+                }
+            } else {
+                tmp += s[i];
+            }
+        }
+        return ret;
+    }
+
+    public static string[] ParseArrayOfStrings(string s) {
+        var list = ParseListOfStrings(s);
+        return list.ToArray();
+    }
 }

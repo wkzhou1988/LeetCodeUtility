@@ -14,6 +14,15 @@ public partial class LeetCodeUtil {
         { typeof (ListNode), DumpListNode },
         { typeof (TreeNode), DumpBinaryTreeNode },
         { typeof (List<TreeNode>), DumpListOfTreeNode },
+        { typeof (Int32), DumpPremitives },
+        { typeof (UInt32), DumpPremitives },
+        { typeof (float), DumpPremitives },
+        { typeof (double), DumpPremitives },
+        { typeof (string), DumpPremitives },
+        { typeof (Char), DumpPremitives },
+        { typeof (Boolean), DumpPremitives },
+        { typeof (char[]), DumpCharArray },
+        { typeof (List<string>), DumpListOfString },
     };
 
     public static void Dump(object o) {
@@ -25,6 +34,36 @@ public partial class LeetCodeUtil {
         } catch (Exception e) {
             Console.WriteLine(e.Message);
         }
+    }
+
+    static StringBuilder DumpListOfString(object o) {
+        List<string> list = (List<string>)o;
+        var sb = new StringBuilder();
+        sb.Append('[');
+        for (int i = 0; i < list.Count; i++) {
+            sb.Append(list[i]);
+            if (i != list.Count - 1)
+                sb.Append(',');
+        }
+        sb.Append(']');
+        return sb;
+    }
+
+    static StringBuilder DumpCharArray(object o) {
+        char[] c = (char[])o;
+        var sb = new StringBuilder();
+        sb.Append('[');
+        for (int i = 0; i < c.Length; i++) {
+            sb.Append(c[i]);
+            if (i != c.Length - 1)
+                sb.Append(',');
+        }
+        sb.Append(']');
+        return sb;
+    }
+
+    static StringBuilder DumpPremitives(object o) {
+        return new StringBuilder(o.ToString());
     }
 
     static StringBuilder DumpInt32Array(object v) {
