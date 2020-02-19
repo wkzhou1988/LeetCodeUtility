@@ -47,13 +47,13 @@ public partial class LeetCodeUtil {
         return ret.next;
     }
 
-    public static int[] ParseInt32Array(string s) {
+    public static int[] ParseArrayOfInt32(string s) {
         if (s.Length < 2) return new int[] { };
         s = s.Substring(1, s.Length - 2);
         return s.Split(',').Select((v) => { return Int32.Parse(v); }).ToArray();
     }
 
-    public static IList<IList<int>> ParseListListOfInt32(string s) {
+    public static IList<IList<int>> ParseListOfInt32Lists(string s) {
         var ret = new List<IList<int>>();
         if (s.Length <= 2) return ret;
         s = s.Substring(1, s.Length - 2);
@@ -77,8 +77,8 @@ public partial class LeetCodeUtil {
         return ret;
     }
 
-    public static Int32[][] ParseArrayOfInt32Array(string s) {
-        var list = ParseListListOfInt32(s);
+    public static Int32[][] ParseArrayOfInt32Arrays(string s) {
+        var list = ParseListOfInt32Lists(s);
         var array = new Int32[list.Count][];
         for (int i = 0; i < list.Count; i++) {
             array[i] = list[i].ToArray();

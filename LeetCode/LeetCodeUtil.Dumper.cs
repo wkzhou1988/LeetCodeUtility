@@ -9,13 +9,17 @@ public partial class LeetCodeUtil {
     static Dictionary<Type, LeetCodeTypeDumpFunc> dumpFuncs = new Dictionary<Type, LeetCodeTypeDumpFunc> {
         { typeof (Int32[]),  DumpInt32Array },
         { typeof (List<Int32>), DumpListOfInt32 },
+        { typeof (List<double>), DumpListOfDouble },
         { typeof (Int32[][]), DumpArrayOfInt32Array },
         { typeof (IList<IList<int>>), DumpListListOfInt32 },
+        { typeof (List<IList<int>>), DumpListListOfInt32 },
         { typeof (ListNode), DumpListNode },
         { typeof (TreeNode), DumpBinaryTreeNode },
         { typeof (List<TreeNode>), DumpListOfTreeNode },
         { typeof (Int32), DumpPremitives },
         { typeof (UInt32), DumpPremitives },
+        { typeof (Int64), DumpPremitives },
+        { typeof (UInt64), DumpPremitives },
         { typeof (float), DumpPremitives },
         { typeof (double), DumpPremitives },
         { typeof (string), DumpPremitives },
@@ -84,6 +88,21 @@ public partial class LeetCodeUtil {
         var sb = new StringBuilder();
         sb.Append('[');
         for (int i = 0; i < list.Count; i++) {
+            sb.Append(list[i]);
+            if (i != list.Count - 1)
+                sb.Append(",");
+        }
+        sb.Append(']');
+        return sb;
+    }
+
+    static StringBuilder DumpListOfDouble(object v)
+    {
+        var list = (List<double>)v;
+        var sb = new StringBuilder();
+        sb.Append('[');
+        for (int i = 0; i < list.Count; i++)
+        {
             sb.Append(list[i]);
             if (i != list.Count - 1)
                 sb.Append(",");
