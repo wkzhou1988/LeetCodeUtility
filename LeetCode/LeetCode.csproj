@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataStructures.cs" />
     <Compile Include="LeetCodeUtil.Dumper.cs" />
     <Compile Include="LeetCodeUtil.Parser.cs" />
     <Compile Include="Program.cs" />
