@@ -11,8 +11,8 @@ public partial class LeetCodeUtil {
         { typeof (List<Int32>), DumpListOfInt32 },
         { typeof (List<double>), DumpListOfDouble },
         { typeof (Int32[][]), DumpArrayOfInt32Array },
-        { typeof (IList<IList<int>>), DumpListListOfInt32 },
-        { typeof (List<IList<int>>), DumpListListOfInt32 },
+        { typeof (IList<IList<int>>), DumpListOfInt32List },
+        { typeof (List<IList<int>>), DumpListOfInt32List },
         { typeof (ListNode), DumpListNode },
         { typeof (TreeNode), DumpBinaryTreeNode },
         { typeof (List<TreeNode>), DumpListOfTreeNode },
@@ -26,6 +26,7 @@ public partial class LeetCodeUtil {
         { typeof (Char), DumpPremitives },
         { typeof (Boolean), DumpPremitives },
         { typeof (char[]), DumpCharArray },
+        { typeof (char[][]), DumpArrayOfCharArrays },
         { typeof (List<string>), DumpListOfString },
     };
 
@@ -58,7 +59,9 @@ public partial class LeetCodeUtil {
         var sb = new StringBuilder();
         sb.Append('[');
         for (int i = 0; i < c.Length; i++) {
+            sb.Append('"');
             sb.Append(c[i]);
+            sb.Append('"');
             if (i != c.Length - 1)
                 sb.Append(',');
         }
@@ -130,7 +133,7 @@ public partial class LeetCodeUtil {
         return sb;
     }
 
-    static StringBuilder DumpListListOfInt32(object o) {
+    static StringBuilder DumpListOfInt32List(object o) {
         IList<IList<int>> list = (IList <IList<int>>)o;
         var sb = new StringBuilder();
         sb.Append('[');
@@ -195,6 +198,20 @@ public partial class LeetCodeUtil {
             sb.Append(s.ToString());
             if (i != list.Count - 1)
                 sb.Append(',');
+        }
+        sb.Append(']');
+        return sb;
+    }
+
+    static StringBuilder DumpArrayOfCharArrays(object o) {
+        var array = (char[][])o;
+        var sb = new StringBuilder();
+        sb.Append('[');
+        for (int i = 0; i < array.Length; i++) {
+            sb.Append(DumpCharArray(array[i]));
+            if (i != array.Length - 1) {
+                sb.Append(',');
+            }
         }
         sb.Append(']');
         return sb;

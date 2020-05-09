@@ -116,4 +116,21 @@ public partial class LeetCodeUtil {
         var list = ParseListOfStrings(s);
         return list.ToArray();
     }
+
+    public static char[][] ParseArrayOfCharArrays(string s) {
+        s = s.Replace("\"", "");
+        s = s.Substring(1, s.Length - 2);
+        var list = new List<char[]>();
+        List<char> current = null;
+        for (int i = 0; i < s.Length; i++) {
+            if (s[i] == '[') {
+                current = new List<char>();
+            } else if (Char.IsDigit(s[i])) {
+                current.Add(s[i]);
+            } else if (s[i] == ']') {
+                list.Add(current.ToArray());
+            }
+        }
+        return list.ToArray();
+    }
 }
