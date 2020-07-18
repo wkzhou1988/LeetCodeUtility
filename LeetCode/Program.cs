@@ -27,12 +27,6 @@ public class SortedHeap<T> where T : IComparable<T> {
         return ret;
     }
 
-    public void Dump() {
-        while (!IsEmpty) {
-            Console.Write(Pop() + ", ");
-        }
-    }
-
     private void HeapifyUp(int index) {
         var parent = (index - 1) / 2;
         if (parent < 0) return;
@@ -45,14 +39,27 @@ public class SortedHeap<T> where T : IComparable<T> {
     private void HeapifyDown(int index) {
         var left = index * 2 + 1;
         var right = index * 2 + 2;
-        if (left < values.Count && (right >= values.Count || ShouldPopUp(left, right)) && ShouldPopUp(left, index)) {
-            Swap(left, index);
-            HeapifyDown(left);
+        // in 2 chid nodes, try to pick a node to bubble up
+        var bubbleUpIndex = GetBubbleUpIndex(left, right, index);
+        if (bubbleUpIndex != index) {
+            Swap(index, bubbleUpIndex);
+            HeapifyDown(bubbleUpIndex);
         }
-        else if (right < values.Count && (left >= values.Count || ShouldPopUp(right, left)) && ShouldPopUp(right, index)) {
-            Swap(right, index);
-            HeapifyDown(right);
+    }
+
+    private int GetBubbleUpIndex(int leftIndex, int rightIndex, int parentIndex) {
+        if (leftIndex < values.Count
+            // child must be larger/smaller than parent to bubble up
+            && values[leftIndex].CompareTo(values[parentIndex]) < 0 
+            // child must no smaller/no larger than the other child
+            && (rightIndex >= values.Count || values[leftIndex].CompareTo(values[rightIndex]) <= 0)) { 
+            return leftIndex;
+        } else if (rightIndex < values.Count 
+            && values[rightIndex].CompareTo(values[parentIndex]) < 0 
+            && (leftIndex >= values.Count || values[rightIndex].CompareTo(values[leftIndex]) <= 0)) {
+            return rightIndex;
         }
+        return parentIndex;
     }
 
     private bool ShouldPopUp(int index, int parent) {
@@ -122,11 +129,10 @@ class Program {
         //}
         var rand = new Random();
         var stack = new SortedHeap<int>();
-        for (int i = 0; i < 10; i++) {
-            var r = rand.Next(1, 100);
+        for (int i = 0; i < 50; i++) {
+            var r = rand.Next(1, 50);
             stack.Push(r);
         }
-        stack.Dump();
         Console.ReadLine();
     }
 }
