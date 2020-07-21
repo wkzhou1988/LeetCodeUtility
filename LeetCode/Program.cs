@@ -1,138 +1,118 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 
-public class SortedHeap<T> where T : IComparable<T> {
-    List<T> values;
-    public SortedHeap() {
-        values = new List<T>();
-    }
-
-    public void Push(T obj) {
-        values.Add(obj);
-        HeapifyUp(values.Count - 1);
-    }
-
-    public bool IsEmpty => values.Count == 0;
-
-    public T Pop() {
-        if (values.Count == 0) {
-            throw new Exception("Stack is empty");
+public class BinarySearchTree {
+    TreeNode root;
+    int size;
+    public void AddNode(int value) {
+        size++;
+        if (root == null) {
+            root = new TreeNode(value);
+            return;
         }
-        var lastIndex = values.Count - 1;
-        Swap(lastIndex, 0);
-        var ret = values[lastIndex];
-        values.RemoveAt(lastIndex);
-        HeapifyDown(0);
+        Insert(root, value);
+    }
+    public TreeNode Root => root;
+    public int Size => size;
+
+    public BinarySearchTree Duplicate() {
+        var ret = new BinarySearchTree();
+        var root = Copy(this.root);
+        ret.root = root;
+        ret.size = this.size;
         return ret;
     }
 
-    private void HeapifyUp(int index) {
-        var parent = (index - 1) / 2;
-        if (parent < 0) return;
-        if (ShouldPopUp(index, parent)) {
-            Swap(index, parent);
-            HeapifyUp(parent);
+    TreeNode Copy(TreeNode node) {
+        if (node == null) return node;
+        var newNode = new TreeNode(node.val);
+        newNode.left = Copy(node.left);
+        newNode.right = Copy(node.right);
+        return newNode;
+    }
+
+    void Insert(TreeNode p, int value) {
+        if (value < p.val) {
+            if (p.left == null) {
+                p.left = new TreeNode(value);
+            }
+            else {
+                Insert(p.left, value);
+            }
         }
-    }
-
-    private void HeapifyDown(int index) {
-        var left = index * 2 + 1;
-        var right = index * 2 + 2;
-        // in 2 chid nodes, try to pick a node to bubble up
-        var bubbleUpIndex = GetBubbleUpIndex(left, right, index);
-        if (bubbleUpIndex != index) {
-            Swap(index, bubbleUpIndex);
-            HeapifyDown(bubbleUpIndex);
+        else if (value > p.val) {
+            if (p.right == null) {
+                p.right = new TreeNode(value);
+            }
+            else {
+                Insert(p.right, value);
+            }
         }
-    }
-
-    private int GetBubbleUpIndex(int leftIndex, int rightIndex, int parentIndex) {
-        if (leftIndex < values.Count
-            // child must be larger/smaller than parent to bubble up
-            && values[leftIndex].CompareTo(values[parentIndex]) < 0 
-            // child must no smaller/no larger than the other child
-            && (rightIndex >= values.Count || values[leftIndex].CompareTo(values[rightIndex]) <= 0)) { 
-            return leftIndex;
-        } else if (rightIndex < values.Count 
-            && values[rightIndex].CompareTo(values[parentIndex]) < 0 
-            && (leftIndex >= values.Count || values[rightIndex].CompareTo(values[leftIndex]) <= 0)) {
-            return rightIndex;
-        }
-        return parentIndex;
-    }
-
-    private bool ShouldPopUp(int index, int parent) {
-        return values[index].CompareTo(values[parent]) < 0;
-    }
-
-    private void Swap(int x, int y) {
-        var temp = values[x];
-        values[x] = values[y];
-        values[y] = temp;
     }
 }
 
+public class Stack {
+    List<int> values = new List<int>();
+    public void Push(int i) {
+        values.Add(i);
+    }
+
+    public int Pop() {
+        var i = values[values.Count - 1];
+        values.RemoveAt(values.Count - 1);
+        return i;
+    }
+    public bool Empty => values.Count == 0;
+    public int Size => values.Count;
+    public Stack Duplicate() {
+        var s = new Stack();
+        s.values = new List<int>(values);
+        return s;
+    }
+    public List<int> GetList() {
+        return new List<int>(values);
+    }
+}
 
 public class Solution {
-    string str1;
-    string str2;
-    string anim;
-    int index1;
-    int index2;
-    bool success;
-
-    void Trackback() {
-        if (success) return;
-        if (index1 + index2 == anim.Length) {
-            success = true;
-        } else {
-            if (index1 < str1.Length && anim[index1 + index2] == str1[index1]) {
-                index1++;
-                Trackback();
-                index1--;
-            }
-            if (index2 < str2.Length && anim[index1 + index2] == str2[index2]) {
-                index2++;
-                Trackback();
-                index2--;
+    List<TreeNode> MakeRoots(int low, int high) {
+        var ret = new List<TreeNode>();
+        if (low <= high) {
+            for (int i = low; i <= high; i++) {
+                var lefts = MakeRoots(low, i - 1);
+                var rights = MakeRoots(i + 1, high);
+                foreach (var l in lefts) {
+                    foreach (var r in rights) {
+                        var root = new TreeNode(i);
+                        root.left = l;
+                        root.right = r;
+                        ret.Add(root);
+                    }
+                }
             }
         }
+        else {
+            ret.Add(null);
+        }
+        return ret;
     }
 
-    public bool IsValid(string str1, string str2, string anim) {
-        this.str1 = str1;
-        this.str2 = str2;
-        this.anim = anim;
-        Trackback();
-        return success;
+    public IList<TreeNode> GenerateTrees(int n) {
+        if (n == 0) return new List<TreeNode>();
+        return MakeRoots(1, n);
     }
 }
+
 
 class Program {
     static void Main(string[] args) {
 
-        //while (true) {
-        //    //var inputString = Console.ReadLine();
-        //    //if (inputString == "exit") break;
+        var s = new Solution();
+        var r = s.GenerateTrees(3);
+        LeetCodeUtil.Dump(r);
 
-        //    try {
-        //        var str1 = Console.ReadLine();
-        //        var str2 = Console.ReadLine();
-        //        var anim = Console.ReadLine();
-        //        var s = new Solution();
-        //        var result = s.IsValid(str1, str2, anim);
-        //        LeetCodeUtil.Dump(result);
-        //    } catch (Exception e) {
-        //        Console.WriteLine(e.Message);
-        //    }
-        //}
-        var rand = new Random();
-        var stack = new SortedHeap<int>();
-        for (int i = 0; i < 50; i++) {
-            var r = rand.Next(1, 50);
-            stack.Push(r);
-        }
         Console.ReadLine();
     }
 }

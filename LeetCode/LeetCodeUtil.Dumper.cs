@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-delegate StringBuilder LeetCodeTypeDumpFunc(object value);
 
 public partial class LeetCodeUtil {
+
+    private delegate StringBuilder LeetCodeTypeDumpFunc(object value);
+
     static Dictionary<Type, LeetCodeTypeDumpFunc> dumpFuncs = new Dictionary<Type, LeetCodeTypeDumpFunc> {
         { typeof (Int32[]),  DumpInt32Array },
         { typeof (List<Int32>), DumpListOfInt32 },
