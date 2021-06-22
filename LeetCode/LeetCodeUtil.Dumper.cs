@@ -30,6 +30,7 @@ public partial class LeetCodeUtil {
         { typeof (char[]), DumpCharArray },
         { typeof (char[][]), DumpArrayOfCharArrays },
         { typeof (List<string>), DumpListOfString },
+        { typeof (string[]), DumpStringArray},
     };
 
     public static void Dump(object o) {
@@ -50,6 +51,19 @@ public partial class LeetCodeUtil {
         for (int i = 0; i < list.Count; i++) {
             sb.Append(list[i]);
             if (i != list.Count - 1)
+                sb.Append(',');
+        }
+        sb.Append(']');
+        return sb;
+    }
+
+    static StringBuilder DumpStringArray(object o) {
+        string[] list = (string[])o;
+        var sb = new StringBuilder();
+        sb.Append('[');
+        for (int i = 0; i < list.Length; i++) {
+            sb.Append(list[i]);
+            if (i != list.Length - 1)
                 sb.Append(',');
         }
         sb.Append(']');
